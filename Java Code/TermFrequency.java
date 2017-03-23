@@ -12,7 +12,6 @@ import java.util.Set;
 public class TermFrequency {
     private final String tagRegex = "<([^>]*)>";
     private final String annotateRegex = "<!--.[^-]*(?=-->)-->";
-    private final String stopWordsFile = "/Users/Flynn/Desktop/eBusiness/Task 10/stop";
     private Map<String, Integer> map = new HashMap<>();
     private Set<String> stopWords = new HashSet<>();
 
@@ -31,7 +30,7 @@ public class TermFrequency {
         return str.trim();
     }
 
-    private void getStopWords() {
+    private void getStopWords(String stopWordsFile) {
         try {
             FileInputStream fis = new FileInputStream(stopWordsFile);
             InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
@@ -45,8 +44,8 @@ public class TermFrequency {
         }
     }
 
-    private void getMap(String filePath) {
-        getStopWords();
+    public Map<String, Integer> getMap(String filePath, String stopWordsFile) {
+        getStopWords(stopWordsFile);
         try {
             FileInputStream fis = new FileInputStream(filePath);
             InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
@@ -82,18 +81,7 @@ public class TermFrequency {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-    }
 
-    public double calculate(String filePath, String word) {
-        getMap(filePath);
-        double total = 0;
-        for (String s : map.keySet()) {
-            total += map.get(s);
-        }
-
-        if (map.containsKey(word)) {
-            return map.get(word) / total;
-        }
-        return 0;
+        return map;
     }
 }
